@@ -5,6 +5,7 @@
 namespace crustgames {
 	class App {
 	public:
+		~App();
 		void WindowInitBefore();
 		void WindowInitAfter();
 		void EventNotifyBefore();

@@ -10,6 +10,15 @@ Window::Window() :window_(sf::VideoMode(crustgames::GAME_FRAME_WIDTH, crustgames
 	window_.setVerticalSyncEnabled(true);
 	window_.setFramerateLimit(crustgames::GAME_FPS_LIMIT);
 }
+
+Window::~Window() {
+	if (ptr_ != nullptr) {
+		if (ptr_->Instance().Get().isOpen()) {
+			ptr_->Instance().Get().close();
+		}
+	}
+}
+
 sf::RenderWindow& Window::Get() {
 	return window_;
 }

@@ -4,6 +4,7 @@
 namespace crustgames {
 	class ControllHandler {
 	public:
+		virtual ~ControllHandler();
 		virtual void WindowClosed(sf::Event& event);
 		virtual void KeyPressed(sf::Event& event);
 		virtual void Resized(sf::Event& event);

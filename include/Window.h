@@ -9,6 +9,7 @@ namespace crustgames {
 	private:
 		static Window* ptr_;
 	public:
+		~Window();
 		sf::RenderWindow& Get();
 	private:
 		sf::RenderWindow window_;

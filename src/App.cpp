@@ -4,6 +4,10 @@
 
 using crustgames::App;
 
+App::~App() {
+
+}
+
 void App::WindowInitBefore() {
 
 }

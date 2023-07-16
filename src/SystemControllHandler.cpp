@@ -6,9 +6,12 @@ using crustgames::SystemControllHandler;
 using crustgames::Window;
 using crustgames::ControllHandlerMgr;
 
-
 SystemControllHandler::SystemControllHandler() {
 	ControllHandlerMgr::Instance().reg(this);
+}
+
+SystemControllHandler::~SystemControllHandler() {
+
 }
 
 void SystemControllHandler::WindowClosed(sf::Event& event) {

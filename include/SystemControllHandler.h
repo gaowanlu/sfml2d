@@ -6,6 +6,7 @@ namespace crustgames {
 	class SystemControllHandler :public ControllHandler {
 	public:
 		SystemControllHandler();
+		virtual ~SystemControllHandler();
 		virtual void WindowClosed(sf::Event& event);
 		//KeyPressed
 		virtual void KeyPressed(sf::Event& event);
