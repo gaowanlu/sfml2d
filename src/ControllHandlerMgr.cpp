@@ -1,13 +1,10 @@
 #include"ControllHandlerMgr.h"
 using crustgames::ControllHandlerMgr;
 
-ControllHandlerMgr* ControllHandlerMgr::ptr_=nullptr;
+ControllHandlerMgr ControllHandlerMgr::controllHandlerInstance;
 
 ControllHandlerMgr& ControllHandlerMgr::Instance() {
-	if (ptr_ == nullptr) {
-		ptr_ = new ControllHandlerMgr;
-	}
-	return *ptr_;
+	return controllHandlerInstance;
 }
 
 ControllHandlerMgr::~ControllHandlerMgr() {
@@ -16,23 +13,24 @@ ControllHandlerMgr::~ControllHandlerMgr() {
 	}
 }
 
-void ControllHandlerMgr::reg(ControllHandler* item) {
+void ControllHandlerMgr::Reg(ControllHandler* item) {
 	for (auto ptr : list_) {
 		if (ptr == item) { return; }
 	}
 	list_.push_back(item);
 }
 
-void ControllHandlerMgr::remove(ControllHandler* item) {
+void ControllHandlerMgr::Remove(ControllHandler* item) {
 	for (auto iter = list_.begin(); iter != list_.end();++iter) {
 		if (*iter == item) {
+			delete item;
 			list_.erase(iter);
 			return;
 		}
 	}
 }
 
-void ControllHandlerMgr::notify(sf::Event& event) {
+void ControllHandlerMgr::Notify(sf::Event& event) {
 	switch (event.type)
 	{
 	case sf::Event::Closed:
@@ -112,5 +110,45 @@ void ControllHandlerMgr::notify(sf::Event& event) {
 		break;
 	default:
 		break;
+	}
+}
+
+void ControllHandlerMgr::WindowInitBefore() {
+	for (auto ptr : list_) {
+		ptr->WindowInitBefore();
+	}
+}
+
+void ControllHandlerMgr::WindowInitAfter() {
+	for (auto ptr : list_) {
+		ptr->WindowInitAfter();
+	}
+}
+
+void ControllHandlerMgr::EventNotifyBefore() {
+	//À¬»ø»ØÊÕ
+	for (auto iter = list_.begin(); iter != list_.end(); ) {
+		if (ControllHandler::WILLDONE==(*iter)->GetLifeState()) {
+			delete (*iter);
+			iter=list_.erase(iter);
+		}
+		else {
+			++iter;
+		}
+	}
+	for (auto ptr : list_) {
+		ptr->EventNotifyBefore();
+	}
+}
+
+void ControllHandlerMgr::EventNotifyAfter() {
+	for (auto ptr : list_) {
+		ptr->EventNotifyAfter();
+	}
+}
+
+void ControllHandlerMgr::Render() {
+	for (auto ptr : list_) {
+		ptr->Render();
 	}
 }

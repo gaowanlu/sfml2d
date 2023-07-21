@@ -4,7 +4,19 @@
 namespace crustgames {
 	class ControllHandler {
 	public:
+		enum LifeState {
+			NORMAL=0,
+			WILLDONE,
+			DONE
+		};
+	public:
+		ControllHandler();
 		virtual ~ControllHandler();
+		virtual void WindowInitBefore();
+		virtual void WindowInitAfter();
+		virtual void EventNotifyBefore();
+		virtual void EventNotifyAfter();
+		virtual void Render();
 		virtual void WindowClosed(sf::Event& event);
 		virtual void KeyPressed(sf::Event& event);
 		virtual void Resized(sf::Event& event);
@@ -20,5 +32,9 @@ namespace crustgames {
 		virtual void JoystickMoved(sf::Event& evnet);
 		virtual void JoystickConnected(sf::Event& evnet);
 		virtual void JoystickDisconnected(sf::Event& evnet);
+		virtual void ToDone();
+		LifeState GetLifeState();
+	private:
+		LifeState m_lifeState;
 	};
 }

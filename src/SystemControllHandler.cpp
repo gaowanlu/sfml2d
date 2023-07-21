@@ -4,10 +4,9 @@
 
 using crustgames::SystemControllHandler;
 using crustgames::Window;
-using crustgames::ControllHandlerMgr;
 
 SystemControllHandler::SystemControllHandler() {
-	ControllHandlerMgr::Instance().reg(this);
+	
 }
 
 SystemControllHandler::~SystemControllHandler() {
@@ -20,4 +19,8 @@ void SystemControllHandler::WindowClosed(sf::Event& event) {
 
 void SystemControllHandler::KeyPressed(sf::Event& event) {
 	std::cout << "key press" << std::endl;
+}
+
+void SystemControllHandler::Resized(sf::Event& event){
+
 }

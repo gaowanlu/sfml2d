@@ -1,8 +1,30 @@
 #include"ControllHandler.h"
+#include"ControllHandlerMgr.h"
 
 using crustgames::ControllHandler;
+using crustgames::ControllHandlerMgr;
+
+ControllHandler::ControllHandler():m_lifeState(NORMAL) {
+	ControllHandlerMgr::Instance().Reg(this);
+}
 
 ControllHandler::~ControllHandler() {
+	m_lifeState = DONE;
+}
+
+void ControllHandler::WindowInitBefore() {
+
+}
+
+void ControllHandler::WindowInitAfter() {
+
+}
+
+void ControllHandler::EventNotifyBefore() {
+	
+}
+
+void ControllHandler::EventNotifyAfter() {
 
 }
 
@@ -64,4 +86,16 @@ void ControllHandler::JoystickConnected(sf::Event& evnet){
 
 void ControllHandler::JoystickDisconnected(sf::Event& evnet){
 
+}
+
+void ControllHandler::Render() {
+
+}
+
+void ControllHandler::ToDone() {
+	m_lifeState = WILLDONE;
+}
+
+ControllHandler::LifeState ControllHandler::GetLifeState() {
+	return m_lifeState;
 }

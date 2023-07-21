@@ -11,11 +11,16 @@ namespace crustgames {
 	private:
 		ControllHandlerMgr()=default;
 	private:
-		static ControllHandlerMgr* ptr_;
+		static ControllHandlerMgr controllHandlerInstance;
 		std::list<ControllHandler*>list_;
 	public:
-		void reg(ControllHandler* item);
-		void remove(ControllHandler*item);
-		void notify(sf::Event&event);
+		void Reg(ControllHandler* item);
+		void Remove(ControllHandler*item);
+		void Notify(sf::Event&event);
+		void WindowInitBefore();
+		void WindowInitAfter();
+		void EventNotifyBefore();
+		void EventNotifyAfter();
+		void Render();
 	};
 }
