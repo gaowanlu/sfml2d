@@ -11,6 +11,7 @@ namespace crustgames {
 	public:
 		Bullet();
 		void Next();
+		bool Render();
 	public:
 		float x{0};
 		float y{0};
@@ -19,8 +20,37 @@ namespace crustgames {
 		int mouse_x{0};
 		int mouse_y{0};
 		sf::Clock clock;
-
 	};
+
+	class Person {
+	public:
+		enum MoveTarget {
+			LEFT = 0,
+			DOWN,
+			TOP,
+			RIGHT
+		};
+	public:
+		Person();
+		void Render();
+		void Left();
+		void Right();
+		void Top();
+		void Down();
+		void Next();
+		void TouchTest();
+	public:
+		float x{ 0 };
+		float y{ 0 };
+		sf::Texture texture;
+		sf::Sprite sprite;
+		std::vector<std::vector<sf::IntRect>> frames;
+		int currentFrame{ 0 };
+		int currentFrameIndex{ 0 };
+		MoveTarget moveTarget{ DOWN };
+		sf::Clock clock;
+	};
+	
 	class My2DShape :public Object2D {
 	public:
 		My2DShape();
@@ -32,25 +62,15 @@ namespace crustgames {
 		virtual void Render();
 		virtual void KeyPressed(sf::Event& event);
 		virtual void MouseButtonPressed(sf::Event& event);
-		void Left();
-		void Right();
-		void Top();
-		void Down();
 	private:
 		FPS fps;
 		sf::Text text;
 		sf::Font font;
 		float x {0};
 		float y {0};
-		sf::Texture texture;
-		sf::Sprite sprite;
-		std::vector<sf::IntRect> frames;
-		int currentFrame{ 0 };
-		sf::Clock clock;
-		int person_x{ 0 };
-		int person_y{ 0 };
 		std::list<Bullet> bullets;
 		sf::Music music;
 		sf::Music bgm;
+		Person person;
 	};
 }
