@@ -5,11 +5,11 @@ using crustgames::ControllHandler;
 using crustgames::ControllHandlerMgr;
 
 ControllHandler::ControllHandler():m_lifeState(NORMAL) {
-	ControllHandlerMgr::Instance().Reg(this);
+    ControllHandlerMgr::Instance().Reg(this);
 }
 
 ControllHandler::~ControllHandler() {
-	m_lifeState = DONE;
+    m_lifeState = DONE;
 }
 
 void ControllHandler::WindowInitBefore() {
@@ -21,7 +21,7 @@ void ControllHandler::WindowInitAfter() {
 }
 
 void ControllHandler::EventNotifyBefore() {
-	
+    
 }
 
 void ControllHandler::EventNotifyAfter() {
@@ -93,9 +93,9 @@ void ControllHandler::Render() {
 }
 
 void ControllHandler::ToDone() {
-	m_lifeState = WILLDONE;
+    m_lifeState = WILLDONE;
 }
 
 ControllHandler::LifeState ControllHandler::GetLifeState() {
-	return m_lifeState;
+    return m_lifeState;
 }
