@@ -39,7 +39,8 @@ namespace crustgames {
         void Top();
         void Down();
         void Next();
-        void TouchTest();
+        bool TouchTest();
+        void Jump();
     public:
         float x{ 0 };
         float y{ 0 };
@@ -49,7 +50,16 @@ namespace crustgames {
         int currentFrame{ 0 };
         int currentFrameIndex{ 0 };
         MoveTarget moveTarget{ DOWN };
-        sf::Clock clock;
+        sf::Clock renderClock;
+        float jumpV{ 0 };//速度
+        float m{0};//质量
+        float g{0};//重力加速度
+        sf::Clock gClock;//重力作用时钟      
+        //左右加速度速度控制
+        float levelV{ 0 };
+        float levelA{ 0 };
+        sf::Clock levelAClock;
+        float scale{ 2. };
     };
 
     class Ball {

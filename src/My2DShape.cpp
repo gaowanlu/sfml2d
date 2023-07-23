@@ -35,28 +35,83 @@ Person::Person() {
 }
 
 void Person::Render() {
-    if (clock.getElapsedTime().asMilliseconds() > 100) // 控制帧率
+    //重力控制
+    if (g < 0.001&&jumpV>0.001) {
+        //计算此时的速度
+        float gapTime = renderClock.getElapsedTime().asMilliseconds();//距离上次计算的时间间隔
+        //计算此时的速度
+        float oldV = jumpV;
+        jumpV = oldV + g * gapTime / 1000.f;
+        float dy = (jumpV * jumpV - oldV * oldV) / (2. * g);//y轴位移
+        //std::cout << "dy " << dy <<" v "<<jumpV<<std::endl;
+        y += (-dy);
+        if (TouchTest()) {
+            g = 0.;
+            jumpV = 0.;
+        }
+    }
+    gClock.restart();
+    //横向速度加速度控制
+    if (moveTarget == LEFT) {//向左
+        if (levelV > 0.001 && levelA < 0.001) {
+            //计算此时的速度
+            float gapTime = levelAClock.getElapsedTime().asMilliseconds();//距离上次计算的时间间隔
+            //计算此时的速度
+            float oldV = levelV;
+            levelV = oldV + levelA * gapTime / 1000.f;
+            float dx = (levelV * levelV - oldV * oldV) / (2. * levelA);//y轴位移
+            x += (-dx);
+            //std::cout << "dx " << (-dx) << " v " << levelV << std::endl;
+            if (TouchTest()) {
+                levelA = 0.;
+                levelV = 0.;
+            }
+        }
+    }
+    if (moveTarget == RIGHT) {//向右
+        if (levelV > 0.001 && levelA < 0.001) {
+            //计算此时的速度
+            float gapTime = levelAClock.getElapsedTime().asMilliseconds();//距离上次计算的时间间隔
+            //计算此时的速度
+            float oldV = levelV;
+            levelV = oldV + levelA * gapTime / 1000.f;
+            float dx = (levelV * levelV - oldV * oldV) / (2. * levelA);//y轴位移
+            x += dx;
+            //std::cout << "dx " << dx << " v " << levelV << std::endl;
+            if (TouchTest()) {
+                levelA = 0.;
+                levelV = 0.;
+            }
+        }
+    }
+    levelAClock.restart();
+    // 控制帧率
+    if (renderClock.getElapsedTime().asMilliseconds() > 100) 
     {
         currentFrameIndex++;
         if (currentFrameIndex >= frames[currentFrame].size())
             currentFrameIndex = 0;
-        clock.restart();
+        renderClock.restart();
     }
     sprite.setTextureRect(frames[currentFrame][currentFrameIndex]);
     sprite.setPosition(sf::Vector2f(x, y));
-    sprite.setScale(sf::Vector2f(2, 2));
+    sprite.setScale(sf::Vector2f(scale,scale));
     Window::Instance().Get().draw(sprite);
 }
 
 void Person::Left() {
     moveTarget = LEFT;
     currentFrame = LEFT;
+    levelV = 1000.;
+    levelA = -4000.;
     Next();
 }
 
 void Person::Right() {
     moveTarget = RIGHT;
     currentFrame = RIGHT;
+    levelV = 1000.;
+    levelA = -4000.;
     Next();
 }
 
@@ -75,29 +130,41 @@ void Person::Down() {
 void Person::Next() {
     switch (moveTarget)
     {
-    case TOP:y-=5; break;
-    case RIGHT:x+=5; break;
-    case DOWN:y+=5; break;
-    case LEFT:x-=5; break;
+    case TOP:y -= 5; break;
+    case DOWN:y += 5; break;
     default:
         break;
     }
     TouchTest();
 }
 
-void Person::TouchTest() {
-    if (x < 0) {
+void Person::Jump() {
+    std::cout << "人物跳跃" << std::endl;
+    //给人物一个向上的初速度
+    jumpV = 100;//0/s
+    g = -40;
+    m = 2;//质量为2
+}
+
+bool Person::TouchTest() {
+    bool iRet = false;
+    if (x < 0.001) {
         x = 0;
+        iRet = true;
     }
-    if (y < 0) {
+    if (y < 0.001) {
         y = 0;
+        iRet = true;
     }
-    if (x > Window::Instance().Get().getSize().x) {
-        x = Window::Instance().Get().getSize().x;
+    if (x > Window::Instance().Get().getSize().x-texture.getSize().x/scale) {
+        x = Window::Instance().Get().getSize().x - texture.getSize().x/scale;
+        iRet = true;
     }
-    if (y > Window::Instance().Get().getSize().y) {
-        y = Window::Instance().Get().getSize().y;
+    if (y > Window::Instance().Get().getSize().y - texture.getSize().y/scale) {
+        iRet = true;
+        y = Window::Instance().Get().getSize().y - texture.getSize().y/scale;
     }
+    return iRet;
 }
 
 My2DShape::My2DShape():Object2D() {
@@ -250,6 +317,9 @@ void My2DShape::KeyPressed(sf::Event& event) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         person.Right();
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        person.Jump();
     }
 }
 
